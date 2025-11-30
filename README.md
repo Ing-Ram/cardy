@@ -1,70 +1,186 @@
-# Getting Started with Create React App
+# Cardy
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based card display application featuring family member profiles with dynamic image matching.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+Cardy is a simple yet elegant React application that displays personalized cards for family members. Each card includes a profile photo, name, and description. The app automatically matches image files to card data using intelligent name normalization.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Dynamic Image Matching**: Automatically maps image filenames to card data using flexible name normalization
+- **Responsive Card Layout**: Clean, centered card layout that displays multiple profiles
+- **Circular Profile Photos**: Avatar-style circular images with elegant styling
+- **Easy to Extend**: Simple component structure makes it easy to add more cards or modify styling
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+```
+cardy/
+├── public/              # Static assets
+│   ├── index.html
+│   ├── manifest.json
+│   └── robots.txt
+├── src/
+│   ├── Components/       # React components
+│   │   ├── button.jsx
+│   │   ├── card.jsx      # Card wrapper component
+│   │   ├── facecard.jsx  # Profile photo component with image lookup
+│   │   ├── imageMapper.js # Image matching utility
+│   │   └── CardCounter.jsx
+│   ├── Pictures/        # Profile images
+│   │   ├── chad_ingram.jpg
+│   │   └── defaultImage.jpg
+│   ├── Styles/          # CSS stylesheets
+│   │   ├── button.css
+│   │   ├── card.css
+│   │   ├── cardcounter.css
+│   │   ├── facecard.css
+│   └── App.js           # Main app component
+├── package.json
+└── README.md
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Image Matching
 
-### `npm run build`
+The `imageMapper.js` utility intelligently matches image filenames to card names using flexible normalization:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Input**: `"Chad Ingram"` (card name)
+- **File**: `chad_ingram.jpg` (image filename)
+- **Matching**: Names are normalized by lowercasing and removing non-alphanumeric characters, so:
+  - `"Chad Ingram"` matches `chad_ingram.jpg`
+  - `"jane-ingram"` matches `jane_ingram.jpg`
+  - Various spacing and punctuation variations are handled automatically
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Fallback behavior: If no matching image is found, the `defaultImage.jpg` is displayed.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
 
-### `npm run eject`
+### Prerequisites
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Node.js (v14 or higher)
+- npm or yarn
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Installation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Clone or navigate to the project directory:
+```bash
+cd cardy
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Install dependencies:
+```bash
+npm install
+```
 
-## Learn More
+### Running the App
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Start the development server:
+```bash
+npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The app will open in your browser at `http://localhost:3000`.
 
-### Code Splitting
+### Building for Production
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Create an optimized production build:
+```bash
+npm run build
+```
 
-### Analyzing the Bundle Size
+### Testing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Run the test suite:
+```bash
+npm test
+```
 
-### Making a Progressive Web App
+## How It Works
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Card Data Structure
 
-### Advanced Configuration
+Cards are defined in `src/App.js` with the following structure:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```javascript
+{
+  cardName: "Chad Ingram",           // Name displayed on card
+  cardDescription: "The Original O.G." // Description text
+}
+```
 
-### Deployment
+### Component Hierarchy
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```
+App
+└── Card (repeated for each cardData object)
+    ├── FaceCard (displays profile photo)
+    │   └── imageMapper.getImageByName() → matches image
+    ├── h1 (displays cardName)
+    ├── p (displays cardDescription)
+    └── Button
+```
 
-### `npm run build` fails to minify
+### Image Lookup Process
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. **Card receives props**: `cardName` and `cardDescription`
+2. **FaceCard extracts name**: Gets `props.cardName`
+3. **Image lookup**: Calls `getImageByName(name)` from `imageMapper.js`
+4. **Normalization**: Name is normalized (lowercase, remove non-alphanumeric)
+5. **Match found or fallback**: Returns matched image or defaults to `defaultImage.jpg`
+
+## Adding New Cards
+
+To add a new family member card:
+
+1. Add the profile image to `src/Pictures/` (use snake_case naming, e.g., `firstname_lastname.jpg`)
+2. Add a new entry to `cardData` in `src/App.js`:
+```javascript
+cardN: {
+  cardName: "First Last",
+  cardDescription: "Brief description"
+}
+```
+3. Add the card to the render section:
+```javascript
+<Card {...cardData.cardN} />
+```
+
+The image will automatically be matched and displayed!
+
+## Styling
+
+All component styles are located in `src/Styles/`:
+
+- **facecard.css**: Circular profile photo styling (50×50px, circular border, shadow)
+- **card.css**: Card layout and spacing
+- **button.css**: Button styling
+- **cardcounter.css**: Counter component styling
+- **App.css**: Global app layout
+
+## Technologies Used
+
+- **React** (v19.2.0): UI library
+- **React DOM** (v19.2.0): DOM rendering
+- **React Scripts** (5.0.1): Build and test tooling
+- **CSS3**: Styling and layout
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+
+## Development Notes
+
+- The app uses Create React App for project scaffolding and build configuration
+- `require.context()` is used in `imageMapper.js` for dynamic image imports
+- Console logs are included for debugging image matching (can be removed in production)
+
+## License
+
+Private project
+
+## Author
+
+Chad Ingram
