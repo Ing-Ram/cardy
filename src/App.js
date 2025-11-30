@@ -3,10 +3,13 @@ import Card from './Components/card';
 import './App.css';
 
 
+
+
 const cardData = {
   card1:  {
     cardName: "Chad Ingram",
     cardDescription: "The Original O.G.",
+    cardImage: "chadingram",
   },
   card2:  { 
     cardName: "Olivia Ingram",

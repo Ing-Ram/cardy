@@ -3,7 +3,7 @@ import  '../Styles/button.css';
 
 
 function Button(props) {
-    return  <button>Button</button>;
+    return  <button className="bluebtn">Button</button>;
 }
 
 

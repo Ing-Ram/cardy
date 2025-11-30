@@ -1,6 +1,6 @@
-    .card {
+.card {
         width: 175px;
-        height: 200px;
+        height: 400px;
         background-color: lightgray;
         color:black;
         margin: 5px;
@@ -8,3 +8,19 @@
         border-radius: 10px;
         
     }
+
+/* h1 {
+    font-size: 20px;
+    align-self: center;
+}
+
+h2 {
+    font-size: 15px;
+    align-self: center;
+}
+
+
+p   {
+    font-size: 12px;
+    align-self: center;
+} */
